@@ -13,11 +13,11 @@ locals {
 
 // Cloud Firestore should be provisioned using... App Engine.
 // https://firebase.google.com/docs/firestore/solutions/automate-database-create#create_a_database_with_terraform
-resource "google_app_engine_application" "app" {
-  project     = var.project
-  location_id = var.location
-  database_type = "CLOUD_FIRESTORE"
-}
+//resource "google_app_engine_application" "app" {
+//  project     = var.project
+//  location_id = var.location
+//  database_type = "CLOUD_FIRESTORE"
+//}
 
 resource "google_storage_bucket" "bucket" {
   name = "${var.project}-tf-gcf"
@@ -85,11 +85,15 @@ resource "google_pubsub_topic" "news" {
   name = "news"
 }
 
+resource "google_pubsub_topic" "crawler_scheduler" {
+  name = "crawler_scheduler"
+}
+
 // GCF: crawler::hackernews.
 module "gcf_upload_crawler-hackernews" {
   source = "./gcf_upload"
 
-  function_name = "crawler-hackernews"
+  function_name = "crawlers/hackernews"
   project = var.project
   region = local.region
   bucket = google_storage_bucket.bucket.name
@@ -110,8 +114,20 @@ resource "google_cloudfunctions_function" "crawler-hackernews" {
   entry_point           = "main"
 }
 
-resource "google_pubsub_topic" "crawler_scheduler" {
-  name = "crawler_scheduler"
+resource "google_cloud_scheduler_job" "crawler_hackernews" {
+  name        = "crawler-hackernews"
+  schedule    = "* 0 * * *" // every day at 00:00
+  region      = local.region
+
+  pubsub_target {
+    topic_name = "projects/${var.project}/topics/${google_pubsub_topic.crawler_scheduler.id}"
+    data       = base64encode("go")
+  }
 }
 
-// cache (redis)
+resource "google_redis_instance" "frontend_cache" {
+  name           = "frontend-cache"
+  region         = local.region
+
+  memory_size_gb = 1
+}
