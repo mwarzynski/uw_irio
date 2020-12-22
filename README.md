@@ -10,6 +10,7 @@ gcloud services enable cloudbuild.googleapis.com
 gcloud services enable redis.googleapis.com
 
 cd infrastructure
+export TF_VAR_project=$(gcloud config get-value project)
 terraform init
 terraform apply
 ```
