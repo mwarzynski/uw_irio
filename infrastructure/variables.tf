@@ -1,7 +1,6 @@
 variable "project" {
   type = string
   description = "Name of your project (e.g. PROJECT_ID from `gcloud projects list`)."
-  default = "irio-project"
 }
 
 variable "region_id" {
