@@ -13,3 +13,9 @@ and that's it. You can call this function locally using:
 ```
 curl "http://localhost:8080"
 ```
+
+## Frontend
+
+```
+npx create-react-app frontend --template material-ui
+```

@@ -5,3 +5,6 @@ terraform.tfstate
 terraform.tfstate.backup
 .terraform
 .venv
+node_modules
+.eslintcache
+build

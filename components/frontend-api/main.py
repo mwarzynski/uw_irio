@@ -10,10 +10,12 @@ def main(request):
     news = []
     for n in news_stream:
         item = n.to_dict()
-
         # Improve the 'published date' format.
         item['publishedDate'] = item['publishedDate'].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-
         news.append(item)
 
-    return jsonify({"news": news})
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+
+    return (jsonify({"news": news}), 200, headers)
