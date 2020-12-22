@@ -164,7 +164,7 @@ resource "google_cloudfunctions_function" "crawler-fake" {
 
 resource "google_cloud_scheduler_job" "crawler" {
   name        = "crawler"
-  schedule    = "* 0 * * *" // every day at 00:00
+  schedule    = "0 * * * *" // every hour
   region      = local.region
 
   pubsub_target {
