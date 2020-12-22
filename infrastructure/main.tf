@@ -28,6 +28,7 @@ module "gcf_upload_frontend-api" {
   source = "./gcf_upload"
 
   function_name = "frontend-api"
+  source_dir = "frontend-api"
   project = var.project
   region = local.region
   bucket = google_storage_bucket.bucket.name
@@ -43,6 +44,8 @@ resource "google_cloudfunctions_function" "frontend-api" {
   source_archive_object = module.gcf_upload_frontend-api.archive_name
   trigger_http          = true
   entry_point           = "main"
+
+  depends_on = [module.gcf_upload_frontend-api]
 }
 
 resource "google_cloudfunctions_function_iam_member" "invoker" {
@@ -60,6 +63,7 @@ module "gcf_upload_backend-api" {
   source = "./gcf_upload"
 
   function_name = "backend-api"
+  source_dir = "backend-api"
   project = var.project
   region = local.region
   bucket = google_storage_bucket.bucket.name
@@ -79,6 +83,12 @@ resource "google_cloudfunctions_function" "backend-api" {
     resource   = google_pubsub_topic.news.name
   }
   entry_point           = "main"
+
+  environment_variables = {
+    "GCLOUD_PROJECT" = var.project
+  }
+
+  depends_on = [module.gcf_upload_backend-api]
 }
 
 resource "google_pubsub_topic" "news" {
@@ -93,7 +103,8 @@ resource "google_pubsub_topic" "crawler_scheduler" {
 module "gcf_upload_crawler-hackernews" {
   source = "./gcf_upload"
 
-  function_name = "crawlers/hackernews"
+  function_name = "crawlers-hackernews"
+  source_dir = "crawlers/hackernews"
   project = var.project
   region = local.region
   bucket = google_storage_bucket.bucket.name
@@ -112,10 +123,47 @@ resource "google_cloudfunctions_function" "crawler-hackernews" {
     resource   = google_pubsub_topic.crawler_scheduler.name
   }
   entry_point           = "main"
+
+  environment_variables = {
+    "PROJECT_ID" = var.project
+  }
+
+  depends_on = [module.gcf_upload_crawler-hackernews]
 }
 
-resource "google_cloud_scheduler_job" "crawler_hackernews" {
-  name        = "crawler-hackernews"
+
+// GCF: crawler::fake.
+module "gcf_upload_crawler-fake" {
+  source = "./gcf_upload"
+
+  function_name = "crawlers-fake"
+  source_dir = "crawlers/fake"
+  project = var.project
+  region = local.region
+  bucket = google_storage_bucket.bucket.name
+}
+
+resource "google_cloudfunctions_function" "crawler-fake" {
+  name        = "crawler-fake"
+  runtime     = "python38"
+  region      = local.region
+
+  available_memory_mb   = 128
+  source_archive_bucket = module.gcf_upload_crawler-fake.bucket
+  source_archive_object = module.gcf_upload_crawler-fake.archive_name
+  trigger_http          = true
+  entry_point           = "main"
+
+  environment_variables = {
+    "PROJECT_ID" = var.project
+  }
+
+  depends_on = [module.gcf_upload_crawler-fake]
+}
+
+
+resource "google_cloud_scheduler_job" "crawler" {
+  name        = "crawler"
   schedule    = "* 0 * * *" // every day at 00:00
   region      = local.region
 
@@ -125,9 +173,10 @@ resource "google_cloud_scheduler_job" "crawler_hackernews" {
   }
 }
 
-resource "google_redis_instance" "frontend_cache" {
-  name           = "frontend-cache"
-  region         = local.region
-
-  memory_size_gb = 1
-}
+// It's expensive. Use only when you need to.
+//resource "google_redis_instance" "frontend_cache" {
+//  name           = "frontend-cache"
+//  region         = local.region
+//
+//  memory_size_gb = 1
+//}

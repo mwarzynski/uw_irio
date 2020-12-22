@@ -15,3 +15,7 @@ variable "region" {
 variable "bucket" {
   type = string
 }
+
+variable "source_dir" {
+  type = string
+}
