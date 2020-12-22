@@ -24,10 +24,15 @@ url = "https://us-central1-irio-project.cloudfunctions.net/frontend-api"
 
 Feel free to check it out (should still work).
 
-If you will run `terraform apply` more than one time, then you will see errors like:
+If you will run `terraform apply` more than one time, then you could see errors like:
 
 ```
 Error: Error creating App Engine application: googleapi: Error 409: This application already exists and cannot be re-created., alreadyExists
 ```
 
 Don't worry, we can only create the GAE once (we can't delete it), therefore terraform complains for the consecutive applies.
+
+In order to fix this, we need to import the GAE to our local terraform state:
+```
+terraform import google_app_engine_application.app project-id
+```
