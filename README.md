@@ -14,6 +14,16 @@ terraform init
 terraform apply
 ```
 
+There will be a question if you *really* want to apply all of these changes. Type "yes" and press enter. After a while,
+you should see a success message with:
+```
+Outputs:
+
+url = "https://us-central1-irio-project.cloudfunctions.net/frontend-api"
+```
+
+Feel free to check it out (should still work).
+
 If you will run `terraform apply` more than one time, then you will see errors like:
 
 ```
