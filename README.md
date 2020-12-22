@@ -19,6 +19,7 @@ you should see a success message with:
 ```
 Outputs:
 
+lb_ip = "35.190.95.151"
 url = "https://us-central1-irio-project.cloudfunctions.net/frontend-api"
 ```
 
