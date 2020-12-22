@@ -13,11 +13,11 @@ locals {
 
 // Cloud Firestore should be provisioned using... App Engine.
 // https://firebase.google.com/docs/firestore/solutions/automate-database-create#create_a_database_with_terraform
-resource "google_app_engine_application" "app" {
-  project     = var.project
-  location_id = var.location
-  database_type = "CLOUD_FIRESTORE"
-}
+//resource "google_app_engine_application" "app" {
+//  project     = var.project
+//  location_id = var.location
+//  database_type = "CLOUD_FIRESTORE"
+//}
 
 resource "google_storage_bucket" "bucket" {
   name = "${var.project}-tf-gcf"
@@ -99,25 +99,25 @@ resource "google_pubsub_topic" "crawler_scheduler" {
   name = "crawler_scheduler"
 }
 
-// GCF: crawler::hackernews.
-module "gcf_upload_crawler-hackernews" {
+// GCF: crawler::rss.
+module "gcf_upload_crawler-rss" {
   source = "./gcf_upload"
 
-  function_name = "crawlers-hackernews"
-  source_dir = "crawlers/hackernews"
+  function_name = "crawlers-rss"
+  source_dir = "crawlers/rss"
   project = var.project
   region = local.region
   bucket = google_storage_bucket.bucket.name
 }
 
-resource "google_cloudfunctions_function" "crawler-hackernews" {
-  name        = "crawler-hackernews"
+resource "google_cloudfunctions_function" "crawler-rss" {
+  name        = "crawler-rss"
   runtime     = "python38"
   region      = local.region
 
   available_memory_mb   = 128
-  source_archive_bucket = module.gcf_upload_crawler-hackernews.bucket
-  source_archive_object = module.gcf_upload_crawler-hackernews.archive_name
+  source_archive_bucket = module.gcf_upload_crawler-rss.bucket
+  source_archive_object = module.gcf_upload_crawler-rss.archive_name
   event_trigger {
     event_type = "google.pubsub.topic.publish"
     resource   = google_pubsub_topic.crawler_scheduler.name
@@ -128,7 +128,7 @@ resource "google_cloudfunctions_function" "crawler-hackernews" {
     "PROJECT_ID" = var.project
   }
 
-  depends_on = [module.gcf_upload_crawler-hackernews]
+  depends_on = [module.gcf_upload_crawler-rss]
 }
 
 
