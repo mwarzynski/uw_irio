@@ -16,4 +16,8 @@ resource "google_cloud_scheduler_job" "crawler" {
     topic_name = "projects/${var.project}/topics/${google_pubsub_topic.crawler_scheduler.name}"
     data       = base64encode("{}")
   }
+
+  depends_on = [
+    google_project_service.cloudscheduler,
+  ]
 }
