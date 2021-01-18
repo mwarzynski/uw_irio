@@ -18,6 +18,7 @@ resource "google_project_service" "cloudscheduler" {
 resource "google_project_service" "cloudfunctions" {
   project = var.project
   service = "cloudfunctions.googleapis.com"
+  disable_on_destroy = false
 }
 
 resource "google_project_service" "cloudbuild" {
