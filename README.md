@@ -2,7 +2,16 @@
 
 ## How to deploy?
 
+Build frontend:
 ```bash
+cd components/frontend
+npm install
+npm run-script build
+```
+
+Deploy the application
+```bash
+
 # TODO: We could probably move enabling APIs to terraform too.
 gcloud services enable cloudscheduler.googleapis.com
 gcloud services enable cloudfunctions.googleapis.com
