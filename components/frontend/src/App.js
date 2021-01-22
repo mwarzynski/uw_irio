@@ -29,7 +29,7 @@ function App() {
   const [news, setNews] = useState([]);
 
   useEffect(() => {
-    fetch("https://us-central1-irio-project.cloudfunctions.net/frontend-api")
+    fetch("/api/news")
       .then(response => response.json())
       .then(
         (result) => {
