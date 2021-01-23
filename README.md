@@ -1,5 +1,7 @@
 # IRIO - News Feed
 
+http://news.potega.xyz/ (@chivay: Thank you!)
+
 ## How to deploy?
 
 Build frontend:
