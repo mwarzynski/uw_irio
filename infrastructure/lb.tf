@@ -51,6 +51,7 @@ resource "google_compute_backend_service" "default" {
 resource "google_compute_region_network_endpoint_group" "news_api" {
   provider = google-beta
 
+  project               = var.project
   name                  = "news-api"
   network_endpoint_type = "SERVERLESS"
   region                = local.region
