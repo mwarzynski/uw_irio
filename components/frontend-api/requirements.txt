@@ -1,1 +1,2 @@
 google-cloud-firestore
+cachetools==4.2.0
