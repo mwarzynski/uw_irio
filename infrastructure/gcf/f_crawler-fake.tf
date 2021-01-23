@@ -1,5 +1,5 @@
 module "crawler-fake" {
-  source = "./trigger_http"
+  source = "../modules/trigger_http"
 
   function_name = "crawler-fake"
   source_dir = "crawlers/fake"

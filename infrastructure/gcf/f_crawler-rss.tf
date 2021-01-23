@@ -1,5 +1,5 @@
 module "crawler-rss" {
-  source = "./trigger_pubsub"
+  source = "../modules/trigger_pubsub"
 
   function_name = "crawler-rss"
   source_dir = "crawlers/rss"

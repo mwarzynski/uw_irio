@@ -1,5 +1,5 @@
 module "frontend-api-eu" {
-  source = "./trigger_http"
+  source = "../modules/trigger_http"
 
   function_name = "frontend-api-eu"
   source_dir = "frontend-api"
@@ -9,7 +9,7 @@ module "frontend-api-eu" {
 }
 
 module "frontend-api-us" {
-  source = "./trigger_http"
+  source = "../modules/trigger_http"
 
   function_name = "frontend-api-us"
   source_dir = "frontend-api"
