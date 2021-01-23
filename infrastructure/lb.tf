@@ -1,7 +1,21 @@
+locals {
+  lb_address = google_compute_global_address.default.address
+}
+
+resource "google_compute_global_address" "default" {
+  project    = var.project
+  name       = "news-api-address"
+}
+
+output "lb_address" {
+  value = local.lb_address
+}
+
 resource "google_compute_global_forwarding_rule" "default" {
   name       = "global-rule"
   target     = google_compute_target_http_proxy.default.id
   port_range = "80"
+  ip_address = local.lb_address
 }
 
 resource "google_compute_target_http_proxy" "default" {
@@ -36,7 +50,6 @@ resource "google_compute_backend_bucket" "static" {
   bucket_name = google_storage_bucket.static-files.name
   enable_cdn  = true
 }
-
 
 resource "google_compute_backend_service" "default" {
   provider = google-beta
