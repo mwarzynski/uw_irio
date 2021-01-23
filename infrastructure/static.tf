@@ -17,6 +17,9 @@ resource "google_storage_bucket" "static-files" {
 }
 
 # Everyone can read
+# One may ask: why default rule and explicit dependency?
+# When applying explicit acl for each object, GCP decides that objects
+# that contain slash "/" in their name are missing :wtf:
 resource "google_storage_default_object_access_control" "public_rule" {
   bucket = google_storage_bucket.static-files.name
   role   = "READER"
