@@ -47,3 +47,7 @@ In order to fix this, we need to import the GAE to our local terraform state:
 ```
 terraform import google_app_engine_application.app project-id
 ```
+
+## Load Tests
+
+https://github.com/mwarzynski/uw_irio/issues/4
