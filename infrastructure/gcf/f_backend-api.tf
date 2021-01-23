@@ -1,5 +1,5 @@
 module "backend-api" {
-  source = "./trigger_pubsub"
+  source = "../modules/trigger_pubsub"
 
   function_name = "backend-api"
   source_dir = "backend-api"
