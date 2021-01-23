@@ -29,4 +29,5 @@ resource "google_storage_bucket_object" "frontend-static" {
   name   = local.static_files[count.index]
   source = join("/", [local.build_dir, local.static_files[count.index]])
   bucket = google_storage_bucket.static-files.name
+  depends_on = [google_storage_default_object_access_control.public_rule]
 }
