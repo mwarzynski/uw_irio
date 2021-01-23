@@ -1,6 +1,6 @@
 provider "google" {
   project = var.project
-  region = var.location
+  region  = var.location
 }
 
 locals {
@@ -13,8 +13,8 @@ locals {
 module "gcf" {
   source = "./gcf"
 
-  project = var.project
-  location = var.location
+  project   = var.project
+  location  = var.location
   region_id = var.region_id
 
   backend-api_trigger_topic = google_pubsub_topic.news.name

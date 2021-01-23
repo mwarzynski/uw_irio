@@ -28,9 +28,9 @@ resource "google_storage_default_object_access_control" "public_rule" {
 
 # Iterate over all files in static file list and put them into bucket
 resource "google_storage_bucket_object" "frontend-static" {
-  count  = length(local.static_files)
-  name   = local.static_files[count.index]
-  source = join("/", [local.build_dir, local.static_files[count.index]])
-  bucket = google_storage_bucket.static-files.name
+  count      = length(local.static_files)
+  name       = local.static_files[count.index]
+  source     = join("/", [local.build_dir, local.static_files[count.index]])
+  bucket     = google_storage_bucket.static-files.name
   depends_on = [google_storage_default_object_access_control.public_rule]
 }
