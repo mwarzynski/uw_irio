@@ -1,3 +1,7 @@
-output "frontend-api" {
-  value = module.frontend-api.gcf
+output "frontend-api-us" {
+  value = module.frontend-api-us.gcf
+}
+
+output "frontend-api-eu" {
+  value = module.frontend-api-eu.gcf
 }

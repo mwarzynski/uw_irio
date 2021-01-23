@@ -56,19 +56,35 @@ resource "google_compute_backend_service" "default" {
   project  = var.project
 
   name = "news-api-service"
+
   backend {
-    group = google_compute_region_network_endpoint_group.news_api.id
+    group = google_compute_region_network_endpoint_group.news_api_us.id
+  }
+  backend {
+    group = google_compute_region_network_endpoint_group.news_api_eu.id
   }
 }
 
-resource "google_compute_region_network_endpoint_group" "news_api" {
+resource "google_compute_region_network_endpoint_group" "news_api_us" {
   provider = google-beta
 
   project               = var.project
-  name                  = "news-api"
+  name                  = "news-api-us"
   network_endpoint_type = "SERVERLESS"
-  region                = local.region
+  region                = "us-central1"
   cloud_function {
-    function = module.gcf.frontend-api.name
+    function = module.gcf.frontend-api-us.name
+  }
+}
+
+resource "google_compute_region_network_endpoint_group" "news_api_eu" {
+  provider = google-beta
+
+  project               = var.project
+  name                  = "news-api-eu"
+  network_endpoint_type = "SERVERLESS"
+  region                = "europe-west1"
+  cloud_function {
+    function = module.gcf.frontend-api-eu.name
   }
 }
