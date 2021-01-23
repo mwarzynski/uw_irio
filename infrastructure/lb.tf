@@ -3,8 +3,8 @@ locals {
 }
 
 resource "google_compute_global_address" "default" {
-  project    = var.project
-  name       = "news-api-address"
+  project = var.project
+  name    = "news-api-address"
 }
 
 output "lb_address" {
