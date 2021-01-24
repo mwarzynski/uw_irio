@@ -1,7 +1,14 @@
 import os
+import logging
 from cachetools import cached, TTLCache
 from flask import jsonify
 from google.cloud import firestore
+from jsonformatter import basicConfig
+
+# Configure built-in Python logger to use Cloud Logging format
+basicConfig(
+    format='{\"severity\": \"%(levelname)s\", \"message\": \"%(message)s\"}',
+    level=logging.INFO)
 
 # GCLOUD_PROJECT
 db = firestore.Client()
@@ -18,7 +25,6 @@ def get_news():
         item['publishedDate'] = item['publishedDate'].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         news.append(item)
     return news
-
 
 def main(request):
     headers = {
