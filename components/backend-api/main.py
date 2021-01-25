@@ -6,6 +6,12 @@ import datetime
 
 
 from google.cloud import firestore
+from jsonformatter import basicConfig
+
+# Configure built-in Python logger to use Cloud Logging format
+basicConfig(
+    format='{\"severity\": \"%(levelname)s\", \"message\": \"%(message)s\"}',
+    level=logging.INFO)
 
 # GCLOUD_PROJECT
 db = firestore.Client()

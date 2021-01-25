@@ -5,7 +5,12 @@ import datetime
 import logging
 
 from google.cloud import pubsub_v1
+from jsonformatter import basicConfig
 
+# Configure built-in Python logger to use Cloud Logging format
+basicConfig(
+    format='{\"severity\": \"%(levelname)s\", \"message\": \"%(message)s\"}',
+    level=logging.INFO)
 
 # Instantiates a Pub/Sub client
 publisher = pubsub_v1.PublisherClient()
@@ -17,6 +22,7 @@ topic_name = "news"
 # Publishes a message to a Cloud Pub/Sub topic.
 def main(event, context):
     feed = feedparser.parse("https://hnrss.org/frontpage")
+    logging.info(f"fetched {len(feed.entries)} entries from hnrss.org")
     for entry in feed.entries:
         try:
             date_published = datetime.datetime.strptime(entry['published'], '%a, %d %b %Y %H:%M:%S +0000')
