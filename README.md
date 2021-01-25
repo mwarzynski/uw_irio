@@ -19,6 +19,7 @@ gcloud services enable cloudscheduler.googleapis.com
 gcloud services enable cloudfunctions.googleapis.com
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable redis.googleapis.com
+gcloud services enable firestore.googleapis.com
 
 cd infrastructure
 export TF_VAR_project=$(gcloud config get-value project)
