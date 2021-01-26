@@ -1,2 +1,2 @@
 google-cloud-firestore
-jsonformatter
+google-cloud-logging
